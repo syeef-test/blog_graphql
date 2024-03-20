@@ -54,6 +54,11 @@ const resolvers = {
 
       return post;
     },
+
+    deletePost(_, args) {
+      _db.posts = _db.posts.filter((post) => post.id !== args.id);
+      return _db.posts;
+    },
   },
 };
 

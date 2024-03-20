@@ -19,6 +19,7 @@ type Query{
 type Mutation{
     addUser(user:AddUserInput):User
     addPost(post:AddPostInput):Post
+    deletePost(id:ID!):[Post]
 }
 input AddUserInput{
     name:String!,
