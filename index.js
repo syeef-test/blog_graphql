@@ -82,6 +82,46 @@ const resolvers = {
         console.error(error);
       }
     },
+    async login(_, args) {
+      try {
+        console.log(args);
+        const existingUser = await UserModel.findOne({
+          email: args.user.email,
+        });
+
+        if (!existingUser) {
+          throw new Error("user does not exist by this email");
+        }
+
+        const match = bcrypt.compareSync(
+          args.user.password,
+          existingUser.password
+        );
+
+        let token = existingUser.token;
+
+        if (!token) {
+          token = jwt.sign(
+            {
+              userId: existingUser._id,
+              name: existingUser.name,
+              email: args.user.email,
+            },
+            process.env.TOKEN_SECRET
+          );
+
+          await UserModel.findOneAndUpdate(
+            { _id: existingUser._id },
+            { $set: { jwt_token: token } }
+          );
+        }
+
+        //return { user: existingUser, token };
+        return existingUser;
+      } catch (error) {
+        console.error(error);
+      }
+    },
     addPost(_, args) {
       let post = {
         ...args.post,

@@ -4,6 +4,7 @@ type User{
     name:String!
     email:String!
     posts:[Post!]
+    jwt_token:String
 }
 type Post{
     id:ID!
@@ -18,11 +19,16 @@ type Query{
 }
 type Mutation{
     addUser(user:AddUserInput):User
+    login(user:LoginInput): User
     addPost(post:AddPostInput):Post
     deletePost(id:ID!):[Post]
 }
 input AddUserInput{
     name:String!,
+    email:String!,
+    password:String!
+}
+input LoginInput{
     email:String!,
     password:String!
 }
