@@ -1,9 +1,26 @@
 import { ApolloServer } from "@apollo/server";
-
 import { startStandaloneServer } from "@apollo/server/standalone";
+
+import dotenv from "dotenv";
+dotenv.config();
+
+import mongoose from "mongoose";
 
 //dummy db
 import _db from "./_db.js";
+
+//mongodb
+async function connectMongoDB() {
+  try {
+    const MONGODB_URI = process.env.MONGODB_URI;
+
+    await mongoose.connect(MONGODB_URI);
+    console.log("Mongodb connected succesfully");
+  } catch (error) {
+    console.log("error connecting to mongodb");
+  }
+}
+connectMongoDB();
 
 //types
 import { typeDefs } from "./schema.js";
