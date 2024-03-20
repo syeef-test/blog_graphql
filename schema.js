@@ -10,17 +10,21 @@ type Post{
     content:String!
     user:User!
 }
-type Follower{
-    id:ID!
-    follower:User!
-    followed:[User!]!
-}
 type Query{
     users:[User]
     user(id:ID!):User
     posts:[Post]
     post(id:ID!):Post
-    followers:[Follower]
-    follower(id:ID!):Follower
+}
+type Mutation{
+    addUser(user:AddUserInput):User
+    addPost(post:AddPostInput):Post
+}
+input AddUserInput{
+    name:String!,
+    email:String!,
+}
+input AddPostInput{
+    content:String!
 }
 `;

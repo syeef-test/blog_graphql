@@ -22,12 +22,6 @@ const resolvers = {
     post(_, args) {
       return _db.posts.find((post) => post.id === args.id);
     },
-    followers() {
-      return _db.followers;
-    },
-    follower(_, args) {
-      return _db.followers.find((f) => f.id === args.id);
-    },
   },
   User: {
     posts(parent) {
@@ -37,6 +31,28 @@ const resolvers = {
   Post: {
     user(parent) {
       return _db.users.find((user) => user.id === parent.user_id);
+    },
+  },
+  Mutation: {
+    addUser(_, args) {
+      //console.log(args);
+      let user = {
+        ...args.user,
+        id: Math.floor(Math.random() * 10000).toString(),
+      };
+      _db.users.push(user);
+
+      //console.log(user);
+      return user;
+    },
+    addPost(_, args) {
+      let post = {
+        ...args.post,
+        id: Math.floor(Math.random() * 10000).toString(),
+      };
+      _db.posts.push(post);
+
+      return post;
     },
   },
 };
