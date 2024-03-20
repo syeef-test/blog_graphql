@@ -22,6 +22,7 @@ type Mutation{
     login(user:LoginInput): User
     addPost(post:AddPostInput):Post
     getPost(user:GetPostInput):[Post]
+    logout(user:LogoutInput):User
 }
 input AddUserInput{
     name:String!,
@@ -37,6 +38,9 @@ input AddPostInput{
     jwt_token:String!
 }
 input GetPostInput{
+    jwt_token:String!
+}
+input LogoutInput{
     jwt_token:String!
 }
 `;

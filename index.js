@@ -81,7 +81,7 @@ const resolvers = {
     },
     async login(_, args) {
       try {
-        console.log(args);
+        //console.log(args);
         const existingUser = await UserModel.findOne({
           email: args.user.email,
         });
@@ -163,6 +163,29 @@ const resolvers = {
           });
           console.log(allPostByUser);
           return allPostByUser;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async logout(_, args) {
+      try {
+        const token = args.user.jwt_token;
+
+        const user = jwt.verify(token, process.env.TOKEN_SECRET);
+
+        if (!user) {
+          throw new Error("jwt token not exist");
+        }
+
+        const existingUser = await UserModel.findById(user.userId);
+        if (existingUser) {
+          const user = await UserModel.findByIdAndUpdate(
+            { _id: existingUser._id },
+            { $set: { jwt_token: null } }
+          );
+
+          return user;
         }
       } catch (error) {
         console.error(error);
