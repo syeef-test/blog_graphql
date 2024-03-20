@@ -22,6 +22,12 @@ const resolvers = {
     post(_, args) {
       return _db.posts.find((post) => post.id === args.id);
     },
+    followers() {
+      return _db.followers;
+    },
+    follower(_, args) {
+      return _db.followers.find((f) => f.id === args.id);
+    },
   },
   User: {
     posts(parent) {

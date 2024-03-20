@@ -12,6 +12,10 @@ let users = [
   { id: "3", name: "peach", email: "peach@gmail.com", password: "peach" },
 ];
 
-let followers = [];
+let followers = [
+  { id: "1", follower_id: "1", followed_id: [2, 3] },
+  { id: "2", follower_id: "2", followed_id: [1, 3] },
+  { id: "3", follower_id: "3", followed_id: [1] },
+];
 
 export default { users, posts, followers };
