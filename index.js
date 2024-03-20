@@ -13,8 +13,14 @@ const resolvers = {
     users() {
       return _db.users;
     },
+    user(_, args) {
+      return _db.users.find((user) => user.id === args.id);
+    },
     posts() {
       return _db.posts;
+    },
+    post(_, args) {
+      return _db.posts.find((post) => post.id === args.id);
     },
   },
 };
