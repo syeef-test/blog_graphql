@@ -34,5 +34,6 @@ input LoginInput{
 }
 input AddPostInput{
     content:String!
+    jwt_token:String!
 }
 `;

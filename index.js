@@ -122,14 +122,31 @@ const resolvers = {
         console.error(error);
       }
     },
-    addPost(_, args) {
-      let post = {
-        ...args.post,
-        id: Math.floor(Math.random() * 10000).toString(),
-      };
-      _db.posts.push(post);
+    async addPost(_, args) {
+      try {
+        console.log(args);
+        const token = args.post.jwt_token;
+        const content = args.post.content;
 
-      return post;
+        const user = jwt.verify(token, process.env.TOKEN_SECRET);
+
+        if (!user) {
+          throw new Error("jwt token not exist");
+        }
+
+        const existingUser = await UserModel.findById(user.userId);
+        if (existingUser) {
+          console.log("existing user", existingUser._id);
+          const newPost = await PostModel.create({
+            content: args.post.content,
+            user_id: existingUser._id,
+          });
+          console.log(newPost);
+          return newPost;
+        }
+      } catch (error) {
+        console.error(error);
+      }
     },
 
     deletePost(_, args) {
