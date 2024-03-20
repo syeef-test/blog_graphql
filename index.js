@@ -11,9 +11,6 @@ import jwt from "jsonwebtoken";
 import UserModel from "./models/userSchema.js";
 import PostModel from "./models/postSchema.js";
 
-//dummy db
-import _db from "./_db.js";
-
 //mongodb
 async function connectMongoDB() {
   try {
@@ -32,27 +29,27 @@ import { typeDefs } from "./schema.js";
 
 const resolvers = {
   Query: {
-    users() {
-      return _db.users;
+    async users() {
+      return await UserModel.find();
     },
-    user(_, args) {
-      return _db.users.find((user) => user.id === args.id);
+    async user(_, args) {
+      return await UserModel.findById(args.id);
     },
-    posts() {
-      return _db.posts;
+    async posts() {
+      return await PostModel.find();
     },
-    post(_, args) {
-      return _db.posts.find((post) => post.id === args.id);
+    async post(_, args) {
+      return await PostModel.findById(args.id);
     },
   },
   User: {
-    posts(parent) {
-      return _db.posts.filter((post) => post.user_id === parent.id);
+    async posts(parent) {
+      return await PostModel.find({ user_id: parent._id });
     },
   },
   Post: {
-    user(parent) {
-      return _db.users.find((user) => user.id === parent.user_id);
+    async user(parent) {
+      return await UserModel.findById(parent.user_id);
     },
   },
   Mutation: {
