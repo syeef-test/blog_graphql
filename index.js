@@ -23,6 +23,16 @@ const resolvers = {
       return _db.posts.find((post) => post.id === args.id);
     },
   },
+  User: {
+    posts(parent) {
+      return _db.posts.filter((post) => post.user_id === parent.id);
+    },
+  },
+  Post: {
+    user(parent) {
+      return _db.users.find((user) => user.id === parent.user_id);
+    },
+  },
 };
 
 const server = new ApolloServer({
