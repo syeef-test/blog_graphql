@@ -5,9 +5,11 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 import UserModel from "./models/userSchema.js";
-import Postodel from "./models/userSchema.js";
+import PostModel from "./models/postSchema.js";
 
 //dummy db
 import _db from "./_db.js";
@@ -54,16 +56,31 @@ const resolvers = {
     },
   },
   Mutation: {
-    addUser(_, args) {
-      //console.log(args);
-      let user = {
-        ...args.user,
-        id: Math.floor(Math.random() * 10000).toString(),
-      };
-      _db.users.push(user);
+    async addUser(_, args) {
+      try {
+        console.log(args);
 
-      //console.log(user);
-      return user;
+        const existingUser = await UserModel.findOne({
+          email: args.user.email,
+        });
+        if (existingUser) {
+          throw new Error("user allready exist");
+        }
+
+        const saltRounds = 10;
+        const hash = await bcrypt.hash(args.user.password, saltRounds);
+        const newUser = await UserModel.create({
+          name: args.user.name,
+          email: args.user.email,
+          password: hash,
+        });
+
+        return newUser;
+
+        // console.log(newUser);
+      } catch (error) {
+        console.error(error);
+      }
     },
     addPost(_, args) {
       let post = {

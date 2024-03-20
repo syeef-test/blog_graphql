@@ -24,6 +24,7 @@ type Mutation{
 input AddUserInput{
     name:String!,
     email:String!,
+    password:String!
 }
 input AddPostInput{
     content:String!
