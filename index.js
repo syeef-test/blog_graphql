@@ -6,6 +6,9 @@ dotenv.config();
 
 import mongoose from "mongoose";
 
+import UserModel from "./models/userSchema.js";
+import Postodel from "./models/userSchema.js";
+
 //dummy db
 import _db from "./_db.js";
 
