@@ -124,7 +124,7 @@ const resolvers = {
     },
     async addPost(_, args) {
       try {
-        console.log(args);
+        //console.log(args);
         const token = args.post.jwt_token;
         const content = args.post.content;
 
@@ -141,17 +141,35 @@ const resolvers = {
             content: args.post.content,
             user_id: existingUser._id,
           });
-          console.log(newPost);
+          //console.log(newPost);
           return newPost;
         }
       } catch (error) {
         console.error(error);
       }
     },
+    async getPost(_, args) {
+      try {
+        const token = args.user.jwt_token;
 
-    deletePost(_, args) {
-      _db.posts = _db.posts.filter((post) => post.id !== args.id);
-      return _db.posts;
+        const user = jwt.verify(token, process.env.TOKEN_SECRET);
+
+        if (!user) {
+          throw new Error("jwt token not exist");
+        }
+
+        const existingUser = await UserModel.findById(user.userId);
+        if (existingUser) {
+          //console.log("existing user", existingUser._id);
+          const allPostByUser = await PostModel.find({
+            user_id: existingUser._id,
+          });
+          console.log(allPostByUser);
+          return allPostByUser;
+        }
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 };

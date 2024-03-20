@@ -21,7 +21,7 @@ type Mutation{
     addUser(user:AddUserInput):User
     login(user:LoginInput): User
     addPost(post:AddPostInput):Post
-    deletePost(id:ID!):[Post]
+    getPost(user:GetPostInput):[Post]
 }
 input AddUserInput{
     name:String!,
@@ -34,6 +34,9 @@ input LoginInput{
 }
 input AddPostInput{
     content:String!
+    jwt_token:String!
+}
+input GetPostInput{
     jwt_token:String!
 }
 `;
