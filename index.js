@@ -208,7 +208,7 @@ const server = new ApolloServer({
 
 await server.start();
 
-app.use("/graphql", cors(), express.json(), expressMiddleware(server));
+app.use("/", cors(), express.json(), expressMiddleware(server));
 
 // const server = new ApolloServer({
 //   typeDefs,
@@ -222,5 +222,5 @@ app.use("/graphql", cors(), express.json(), expressMiddleware(server));
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
-  console.log(`🚀 Server ready at http://localhost:${port}/graphql`);
+  console.log(`🚀 Server ready at http://localhost:${port}`);
 });

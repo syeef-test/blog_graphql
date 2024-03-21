@@ -204,10 +204,10 @@ const server = new ApolloServer({
 async function startServer() {
   try {
     await server.start();
-    app.use("/graphql", cors(), express.json(), expressMiddleware(server));
+    app.use("/", cors(), express.json(), expressMiddleware(server));
     const port = process.env.PORT || 4000;
     app.listen(port, () => {
-      console.log(`🚀 Server ready at http://localhost:${port}/graphql`);
+      console.log(`🚀 Server ready at http://localhost:${port}`);
     });
   } catch (error) {
     console.error("Error starting server:", error);
