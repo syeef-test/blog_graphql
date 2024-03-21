@@ -1,6 +1,5 @@
 import { ApolloServer } from "@apollo/server";
-// import { expressMiddleware } from "@apollo/server/express4";
-import { express as expressMiddleware } from "@apollo/server-express";
+import { expressMiddleware } from "@apollo/server/express4";
 import cors from "cors";
 import express from "express";
 
@@ -206,6 +205,11 @@ async function startServer() {
   try {
     await server.start();
     const app = express();
+
+    app.get("/", (req, res) => {
+      res.send("Welcome to my Apollo GraphQL server!");
+    });
+
     app.use("/", cors(), express.json(), expressMiddleware(server));
     const port = process.env.PORT || 4000;
     app.listen(port, () => {
