@@ -1,6 +1,5 @@
 import { ApolloServer } from "@apollo/server";
-// import { expressMiddleware } from "@apollo/server/express4";
-import { express as expressMiddleware } from "@apollo/server-express";
+import { expressMiddleware } from "@apollo/server/express4";
 import cors from "cors";
 import express from "express";
 
