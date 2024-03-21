@@ -1,5 +1,9 @@
 import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
+import { expressMiddleware } from "@apollo/server/express4";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import express from "express";
+import http from "http";
+import cors from "cors";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -10,6 +14,14 @@ import jwt from "jsonwebtoken";
 
 import UserModel from "./models/userSchema.js";
 import PostModel from "./models/postSchema.js";
+
+//express app
+const app = express();
+const httpServer = http.createServer(app);
+
+app.get("/", (req, res) => {
+  res.send("Welcome to my Apollo GraphQL server!");
+});
 
 //mongodb
 async function connectMongoDB() {
@@ -197,8 +209,38 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
-const { url } = await startStandaloneServer(server, { listen: { port: 4000 } });
+async function startServer() {
+  try {
+    await server.start();
+  } catch (error) {
+    console.error("Error starting server:", error);
+  }
+}
 
-console.log("Server is runing on port", 4000);
+await startServer();
+
+app.use(
+  "/",
+  cors(),
+  express.json(),
+  // expressMiddleware accepts the same arguments:
+  // an Apollo Server instance and optional configuration options
+  expressMiddleware(server, {
+    context: async ({ req }) => ({ token: req.headers.token }),
+  })
+);
+
+async function start() {
+  try {
+    await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
+    const address = httpServer.address();
+    const serverUrl = `http://${address.address}:${address.port}`;
+    console.log(`🚀 Server ready at ${serverUrl}`);
+  } catch (error) {
+    console.log(error);
+  }
+}
+start();
