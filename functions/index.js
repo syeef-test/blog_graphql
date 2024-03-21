@@ -204,6 +204,7 @@ const server = new ApolloServer({
 async function startServer() {
   try {
     await server.start();
+    const app = express();
     app.use("/", cors(), express.json(), expressMiddleware(server));
     const port = process.env.PORT || 4000;
     app.listen(port, () => {
