@@ -206,8 +206,15 @@ const server = new ApolloServer({
   resolvers,
 });
 
-await server.start();
+async function startserver() {
+  try {
+    await server.start();
+  } catch (error) {
+    console.log("error");
+  }
+}
 
+startserver();
 app.use("/graphql", cors(), express.json(), expressMiddleware(server));
 
 // const server = new ApolloServer({
