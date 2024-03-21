@@ -1,9 +1,6 @@
 import { ApolloServer } from "@apollo/server";
-
 import { expressMiddleware } from "@apollo/server/express4";
-
 import cors from "cors";
-
 import express from "express";
 
 import dotenv from "dotenv";
@@ -199,35 +196,22 @@ const resolvers = {
   },
 };
 
-const app = express();
-
 const server = new ApolloServer({
   typeDefs,
   resolvers,
 });
 
-async function startserver() {
+async function startServer() {
   try {
     await server.start();
+    app.use("/graphql", cors(), express.json(), expressMiddleware(server));
+    const port = process.env.PORT || 4000;
+    app.listen(port, () => {
+      console.log(`🚀 Server ready at http://localhost:${port}/graphql`);
+    });
   } catch (error) {
-    console.log("error");
+    console.error("Error starting server:", error);
   }
 }
 
-startserver();
-app.use("/graphql", cors(), express.json(), expressMiddleware(server));
-
-// const server = new ApolloServer({
-//   typeDefs,
-//   resolvers,
-// });
-
-// const { url } = await startStandaloneServer(server, { listen: { port: 4000 } });
-
-// console.log("Server is runing on port ", 4000);
-// console.log(`🚀  Server ready at ${url}`);
-
-const port = process.env.PORT || 4000;
-app.listen(port, () => {
-  console.log(`🚀 Server ready at http://localhost:${port}/graphql`);
-});
+startServer();
